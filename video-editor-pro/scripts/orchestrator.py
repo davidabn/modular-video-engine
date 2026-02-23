@@ -203,12 +203,10 @@ def update_remotion_config(state):
     person_box = transcript.get("person_box", {"x": 0.5, "width": 0.3})
     
     if state["features"]["subtitles"] or state["features"]["side_captions"]:
-        # Adicionamos um pequeno offset (ex: 0.15s) para compensar o atraso do vídeo processado
-        # em relação aos timestamps do AssemblyAI/Whisper.
-        SYNC_OFFSET = 0.15 
+        # SYNC_OFFSET: Aumentado para 0.25s para garantir que a legenda não antecipe a fala.
+        SYNC_OFFSET = 0.25 
 
         for seg in transcript['segments']:
-            # Encontrar as palavras que pertencem a este segmento para precisão total
             seg_words = [
                 {**w, 'start': w['start'] + SYNC_OFFSET, 'end': w['end'] + SYNC_OFFSET} 
                 for w in transcript.get('words', [])

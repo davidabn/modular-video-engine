@@ -173,7 +173,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       const lastWord = currentLine[currentLine.length - 1];
                       const isTooLong = currentLine.length >= 5;
                       const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
-                      const isPause = lastWord && (w.start - lastWord.end > 0.4);
+                      const isPause = lastWord && (w.start - lastWord.end > 0.2); // Reduzido para 0.2s
 
                       if (lastWord && (isTooLong || hasPunctuation || isPause)) {
                           classicChunks.push({
