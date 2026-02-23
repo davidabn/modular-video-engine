@@ -4,9 +4,20 @@ import json
 import argparse
 import subprocess
 import shutil
+import platform
+
+# Add local bin folder to PATH for portable FFmpeg
+local_bin = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "bin"))
+os.environ["PATH"] = local_bin + os.pathsep + os.environ["PATH"]
 
 REMOTION_PROJECT_DIR = "editor-master"
-VENV_PYTHON = "./venv/bin/python3"
+
+# Cross-platform venv path
+if platform.system() == "Windows":
+    VENV_PYTHON = os.path.abspath("./venv/Scripts/python.exe")
+else:
+    VENV_PYTHON = os.path.abspath("./venv/bin/python3")
+
 PROCESSOR_SCRIPT = "video-editor-pro/scripts/processor.py"
 STATE_FILE = os.path.join(REMOTION_PROJECT_DIR, "project_state.json")
 

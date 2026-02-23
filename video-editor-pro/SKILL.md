@@ -5,20 +5,22 @@ description: Automates the video editing pipeline: silence removal (Silero VAD),
 
 # Video Editor Pro (Modular Engine)
 
-This skill transforms raw videos into polished content using a **Hybrid Modular Pipeline**. It separates heavy video processing (Python/FFmpeg) from creative overlays (Remotion/React) for maximum speed and quality.
+This skill transforms raw videos into polished content using a **Hybrid Modular Pipeline**. It is cross-platform (Windows/Mac) and supports portable setup.
 
-## 🚀 Quick Start for the Agent
+## 🚀 Environment Setup (Agent-First)
 
-1.  **Setup Environment**: If the user just joined, check if `editor-master/node_modules` and the Python `venv` exist. If not, suggest running `./setup.sh`.
-2.  **Core Toolset**:
-    -   **Orchestrator**: `video-editor-pro/scripts/orchestrator.py` (The main brain).
-    -   **Compositor**: `editor-master/fast_render.py` (The fast renderer).
-    -   **Data Source**: `editor-master/remotion_input.json` (Single source of truth).
+If you are running in a new environment (e.g., just cloned from GitHub):
+1.  **Check Prerequisites**: Check if `bin/ffmpeg` (or `ffmpeg.exe`), `venv/`, and `editor-master/node_modules` exist.
+2.  **Auto-Setup**: If any are missing, **AUTOMATICALLY** run:
+    ```bash
+    python3 setup.py
+    ```
+    This script will download a portable FFmpeg, setup the Python venv, and install Node dependencies. No user intervention required.
 
 ## 🛠 Workflow
 
 ### 1. Processing (Modular Logic)
-Always use `video-editor-pro/scripts/orchestrator.py` for video manipulation.
+Always use `video-editor-pro/scripts/orchestrator.py` for video manipulation. It automatically uses the portable FFmpeg if available.
 
 -   **Cut Silences**: `python3 video-editor-pro/scripts/orchestrator.py --cut` (Uses Silero VAD).
 -   **Transcribe**: `python3 video-editor-pro/scripts/orchestrator.py --subtitles` (Uses **AssemblyAI**).

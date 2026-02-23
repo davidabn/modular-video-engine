@@ -2,27 +2,27 @@
 
 Este projeto é um motor de edição de vídeo híbrido (Python + Remotion) projetado para ser usado com o **Antigravity** ou **Gemini CLI**.
 
-## 🚀 Como começar (Para Humanos)
+## 🚀 Como começar (Para Humanos e IAs)
 
 1.  **Clone o repositório**:
     ```bash
     git clone <seu-repo-url>
-    cd editor-master
+    cd modular-video-engine
     ```
-2.  **Rode o Setup**:
+2.  **Rode o Setup Universal (Mac/Windows/Linux)**:
     ```bash
-    ./setup.sh
+    python3 setup.py
     ```
-3.  **Abra no Antigravity**:
-    Basta abrir a pasta e começar a pedir edições de vídeo.
+    Isso instala: Python Venv, Node modules e o **FFmpeg portátil** (não precisa de `brew` ou instalar nada no sistema).
 
 ---
 
 ## 🤖 Instruções para o Agente (Antigravity/Gemini CLI)
 
-Se você é o agente operando este projeto, siga estas diretrizes:
+Se você é o agente operando este projeto:
 
-1.  **Ative a Skill Local**:
+1.  **Auto-Setup**: Se detectar falta de FFmpeg ou dependências, execute `python3 setup.py` imediatamente.
+2.  **Ative a Skill Local**:
     ```bash
     activate_skill video-editor-pro/SKILL.md
     ```
