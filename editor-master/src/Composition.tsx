@@ -11,7 +11,7 @@ interface Subtitle {
 
 // --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Minimalist Rítmico) ---
 const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: number }[]; time: number }> = ({ words, time }) => {
-  const { fps, width } = useVideoConfig();
+  const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   
   const lastWordEnd = words[words.length - 1]?.end || 0;
@@ -29,13 +29,6 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
     config: springConfig,
   });
 
-  // Cálculo de Auto-Escala para não vazar da tela
-  const fullText = words.map(w => w.text).join(" ");
-  const baseFontSize = 4.2 * 16; // 4.2rem em pixels (aprox)
-  const estimatedWidth = fullText.length * (baseFontSize * 0.6); // Estimativa conservadora
-  const maxWidth = width * 0.9; // 90% da largura da tela
-  const autoScale = Math.min(1, maxWidth / estimatedWidth);
-
   return (
     <AbsoluteFill style={{ 
       justifyContent: "center", 
@@ -43,9 +36,37 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
       top: "55%", 
       height: "fit-content",
       pointerEvents: "none",
-      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1]) * autoScale})`, // Aplica auto-escala aqui
+      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1])})`,
       opacity: pop
     }}>
+      <div style={{
+        display: "flex",
+        flexWrap: "nowrap",
+        justifyContent: "center",
+        gap: "12px",
+        maxWidth: "95%",
+        textAlign: "center"
+      }}>
+        {words.map((w, i) => {
+          return (
+            <span key={i} style={{
+              color: "white", 
+              fontSize: "4.2rem",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontWeight: 900,
+              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
+              WebkitTextStroke: "2px black",
+              paintOrder: "stroke fill",
+              whiteSpace: "nowrap"
+            }}>
+              {w.text}
+            </span>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
       <div style={{
         display: "flex",
         flexWrap: "nowrap",
@@ -182,11 +203,13 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                   s.words.forEach((w, idx) => {
                       const lastWord = currentLine[currentLine.length - 1];
                       
-                      // RITMO SENSÍVEL:
-                      // 1. Limite de 6 palavras (mais flexível)
-                      // 2. Pontuação forte (.?!)
-                      // 3. Pausa de 0.15s (antes era 0.2s)
-                      const isTooLong = currentLine.length >= 6;
+                      // RITMO E ESPAÇO:
+                      // 1. Limite de 5 palavras
+                      // 2. Limite de 22 caracteres (segurança para o frame)
+                      // 3. Pontuação forte (.?!)
+                      // 4. Pausa de 0.15s
+                      const currentCharCount = currentLine.reduce((acc, curr) => acc + curr.text.length + 1, 0) + w.text.length;
+                      const isTooLong = currentLine.length >= 5 || currentCharCount > 22;
                       const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
                       const isPause = lastWord && (w.start - lastWord.end > 0.15);
 
