@@ -1,6 +1,7 @@
 import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig, staticFile, Sequence, interpolate } from "remotion";
 import React from "react";
 import { Scene } from "./components/MotionGraphics";
+import { spring } from "remotion";
 
 interface Subtitle {
   start: number;
@@ -9,36 +10,55 @@ interface Subtitle {
   words?: { text: string; start: number; end: number }[];
 }
 
-// --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Style) ---
+// --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Minimalist) ---
 const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: number }[]; time: number }> = ({ words, time }) => {
+  const { fps } = useVideoConfig();
+  const frame = useCurrentFrame();
+  
+  // A animação de pop-up baseada no início da sequência (frame 0 da linha atual)
+  const springConfig = {
+    damping: 12,
+    stiffness: 100,
+    mass: 0.5,
+  };
+  
+  const pop = spring({
+    fps,
+    frame,
+    config: springConfig,
+  });
+
   return (
     <AbsoluteFill style={{ 
       justifyContent: "center", 
       alignItems: "center", 
-      bottom: "20%", 
+      top: "10%", // Levemente abaixo do centro (50% + 10%)
       height: "fit-content",
-      pointerEvents: "none"
+      pointerEvents: "none",
+      transform: `scale(${interpolate(pop, [0, 1], [0.8, 1])})`,
+      opacity: pop
     }}>
       <div style={{
         display: "flex",
-        flexWrap: "wrap",
+        flexWrap: "nowrap", // Força uma única linha
         justifyContent: "center",
-        gap: "10px",
-        maxWidth: "90%",
+        gap: "12px",
+        maxWidth: "95%",
         textAlign: "center"
       }}>
         {words.map((w, i) => {
           const isCurrent = time >= w.start && time < w.end;
           return (
             <span key={i} style={{
-              color: isCurrent ? "#FFFF00" : "white", // Amarelo quando falado, Branco no resto
-              fontSize: "4.5rem",
+              color: isCurrent ? "#FFFF00" : "white",
+              fontSize: "4.2rem",
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 900,
-              textTransform: "uppercase",
+              // Removido uppercase para seguir o padrão do usuário
               textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
               WebkitTextStroke: "2px black",
-              paintOrder: "stroke fill"
+              paintOrder: "stroke fill",
+              whiteSpace: "nowrap"
             }}>
               {w.text}
             </span>
@@ -185,20 +205,44 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               
               const isSide = layout?.style === "side" && layout?.person_box;
 
-              // --- MODO CLÁSSICO (Fallback / TikTok Padrão) ---
+              // --- MODO CLÁSSICO (Fallback / TikTok Minimalist) ---
               if (!isSide) {
-                  return (
+                  // Agrupar palavras em linhas de 5 no máximo
+                  const classicChunks: {words: typeof s.words, start: number, end: number}[] = [];
+                  let currentLine: typeof s.words = [];
+
+                  s.words.forEach((w, idx) => {
+                      if (currentLine.length >= 5) {
+                          classicChunks.push({
+                              words: currentLine,
+                              start: currentLine[0].start,
+                              end: w.start
+                          });
+                          currentLine = [w];
+                      } else {
+                          currentLine.push(w);
+                      }
+                  });
+                  if (currentLine.length > 0) {
+                      classicChunks.push({
+                          words: currentLine,
+                          start: currentLine[0].start,
+                          end: currentLine[currentLine.length - 1].end
+                      });
+                  }
+
+                  return classicChunks.map((chunk, chunkIdx) => (
                     <Sequence 
-                      key={`classic-sub-${i}`} 
-                      from={Math.round(s.start * fps)}
-                      durationInFrames={Math.max(1, Math.round((s.end - s.start) * fps))}
+                      key={`classic-sub-${i}-${chunkIdx}`} 
+                      from={Math.round(chunk.start * fps)}
+                      durationInFrames={Math.max(1, Math.round((chunk.end - chunk.start) * fps))}
                     >
                       <TikTokSubtitle 
-                        words={s.words} 
+                        words={chunk.words} 
                         time={time}
                       />
                     </Sequence>
-                  );
+                  ));
               }
 
               // --- MODO SIDE-BY-SIDE (Otimizado para Horizontal) ---
