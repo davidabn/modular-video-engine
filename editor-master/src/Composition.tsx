@@ -1,6 +1,6 @@
 import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig, staticFile, Sequence, interpolate } from "remotion";
 import React from "react";
-import { Scene } from "./components/MotionGraphics";
+import { Scene, DanKoeWordByWord } from "./components/MotionGraphics";
 
 interface Subtitle {
   start: number;
@@ -137,13 +137,32 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
         </Sequence>
       ))}
 
-      {/* Camada 3: Legendas Side-by-Side (Sincronia Milimétrica + Dynamic Chunking) */}
+      {/* Camada 3: Legendas Dinâmicas (Side-by-Side ou Clássica Dan Koe) */}
       {showSubtitles && (
         <AbsoluteFill style={{ pointerEvents: "none" }}>
           {subtitles.map((s, i) => {
-              const isSide = layout?.style === "side";
-              if (!isSide || !layout || !s.words) return null;
+              if (!s.words) return null;
+              
+              const isSide = layout?.style === "side" && layout?.person_box;
 
+              // --- MODO CLÁSSICO (Fallback / Padrão) ---
+              if (!isSide) {
+                  return (
+                    <Sequence 
+                      key={`classic-sub-${i}`} 
+                      from={Math.round(s.start * fps)}
+                      durationInFrames={Math.max(1, Math.round((s.end - s.start) * fps))}
+                    >
+                      <DanKoeWordByWord 
+                        words={s.words} 
+                        sceneStart={s.start} 
+                        sfx={staticFile("soundfx/pop-up/tech-pop.mp3")} 
+                      />
+                    </Sequence>
+                  );
+              }
+
+              // --- MODO SIDE-BY-SIDE (Otimizado para Horizontal) ---
               const personX = layout.person_box.x * width;
               const personWidth = (layout.person_box.width * 0.5) * width;
               const leftEdge = personX - personWidth/2 - 30;
@@ -151,20 +170,19 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               const edgeMargin = width * 0.05;
               const leftMaxWidth = Math.max(100, leftEdge - edgeMargin);
               const rightMaxWidth = Math.max(100, (width - rightEdge) - edgeMargin);
-              const fontSize = width * 0.045; // Fonte maior para melhor leitura
+              const fontSize = width * 0.045;
 
-              // Agrupar palavras em blocos (chunks) menores para manter a fonte grande
+              // Agrupar palavras em blocos (chunks) menores
               const wordChunks: {words: typeof s.words, start: number, end: number}[] = [];
               let currentChunk: typeof s.words = [];
               let currentCharCount = 0;
 
               s.words.forEach((w, idx) => {
-                  // Limite de ~25 caracteres por bloco para manter a fonte grande e em uma linha
                   if (currentCharCount + w.text.length > 25 && currentChunk.length > 0) {
                       wordChunks.push({
                           words: currentChunk,
                           start: currentChunk[0].start,
-                          end: w.start // Termina quando a PR\u00d3XIMA palavra come\u00e7a
+                          end: w.start
                       });
                       currentChunk = [w];
                       currentCharCount = w.text.length;

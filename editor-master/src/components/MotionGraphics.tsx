@@ -101,7 +101,7 @@ const KineticWord: React.FC<{ text: string; startFrame: number; styleType: 'slid
     );
 };
 
-const DanKoeWordByWord: React.FC<{ words: Word[], sceneStart: number, sfx: string }> = ({ words, sceneStart, sfx }) => {
+export const DanKoeWordByWord: React.FC<{ words: Word[], sceneStart: number, sfx: string }> = ({ words, sceneStart, sfx }) => {
     const { fps } = useVideoConfig();
     const frame = useCurrentFrame();
     
