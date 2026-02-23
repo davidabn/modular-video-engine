@@ -1,7 +1,6 @@
-import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig, staticFile, Sequence, interpolate } from "remotion";
+import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig, staticFile, Sequence, interpolate, spring } from "remotion";
 import React from "react";
 import { Scene } from "./components/MotionGraphics";
-import { spring } from "remotion";
 
 interface Subtitle {
   start: number;
@@ -10,7 +9,7 @@ interface Subtitle {
   words?: { text: string; start: number; end: number }[];
 }
 
-// --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Minimalist) ---
+// --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Minimalist Rítmico) ---
 const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: number }[]; time: number }> = ({ words, time }) => {
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
@@ -31,10 +30,10 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
     <AbsoluteFill style={{ 
       justifyContent: "center", 
       alignItems: "center", 
-      top: "55%", // Agora sim: um pouco abaixo do centro (50% + 5%)
+      top: "55%", 
       height: "fit-content",
       pointerEvents: "none",
-      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1])})`, // Escala mais sutil
+      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1])})`,
       opacity: pop
     }}>
       <div style={{
@@ -46,16 +45,13 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
         textAlign: "center"
       }}>
         {words.map((w, i) => {
-          const isVisible = time >= w.start;
-          if (!isVisible) return null; // A palavra só aparece quando o tempo chega nela
-
           return (
             <span key={i} style={{
               color: "white", 
               fontSize: "4.2rem",
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 900,
-              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
+              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, -2px 2px 0 #000",
               WebkitTextStroke: "2px black",
               paintOrder: "stroke fill",
               whiteSpace: "nowrap"
@@ -98,34 +94,9 @@ interface MyCompositionProps {
   transparent?: boolean;
   renderMode?: 'preview' | 'overlay';
   layerFilter?: 'all' | 'subtitles' | 'animations';
-  selectedMgId?: string; // NOVO: Para renderizar apenas uma animação específica
-  backgroundColor?: string; // NOVO: Para Chroma Key
+  selectedMgId?: string;
+  backgroundColor?: string;
 }
-
-const chunkSubtitles = (text: string, isSide: boolean = false) => {
-  const words = text.split(" ");
-  const chunks = [];
-  let currentChunk: string[] = [];
-  
-  // Limite de caracteres: ~40 para side captions (20 por lado), ~25 para central
-  const charLimit = isSide ? 40 : 25;
-
-  words.forEach(word => {
-    const tempChunk = [...currentChunk, word];
-    if (tempChunk.join(" ").length > charLimit && currentChunk.length > 0) {
-      chunks.push(currentChunk.join(" "));
-      currentChunk = [word];
-    } else {
-      currentChunk.push(word);
-    }
-  });
-  
-  if (currentChunk.length > 0) {
-    chunks.push(currentChunk.join(" "));
-  }
-  
-  return chunks;
-};
 
 export const MyComposition: React.FC<MyCompositionProps> = ({
   video_path,
@@ -136,7 +107,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
   motion_graphics,
   zooms = [],
   transparent = false,
-  renderMode = 'preview', // 'preview' | 'overlay'
+  renderMode = 'preview',
   layerFilter = 'all',
   selectedMgId,
   backgroundColor,
@@ -151,29 +122,20 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
   const showSubtitles = (layerFilter === 'all' || layerFilter === 'subtitles') && !selectedMgId;
 
   const isTransparentLayer = layerFilter === 'subtitles' || (transparent && layerFilter === 'all');
-  
-  const backgroundStyle = backgroundColor || ((isOverlayMode || transparent || isTransparentLayer) 
-    ? "transparent" 
-    : "black");
-
-  // Encontrar o nível de zoom atual
+  const backgroundStyle = backgroundColor || ((isOverlayMode || transparent || isTransparentLayer) ? "transparent" : "black");
   const activeZoom = zooms.find(z => time >= z.start && time <= z.end);
   const scale = activeZoom ? activeZoom.scale : 1;
-
-  // Renderização Modular de uma Animação Específica
   const selectedMg = selectedMgId ? motion_graphics.find(m => m.id === selectedMgId) : null;
 
   return (
     <AbsoluteFill style={{ backgroundColor: backgroundStyle }}>
       
-      {/* Modo Modular: Renderiza apenas a animação selecionada começando do zero */}
       {selectedMg && (
         <AbsoluteFill>
             <Scene mg={selectedMg} />
         </AbsoluteFill>
       )}
 
-      {/* Camada 1: Vídeo Original (Apenas se não for modular) */}
       {showVideo && !selectedMgId && (
         <Sequence name="Vídeo Original" durationInFrames={durationInFrames}>
           <AbsoluteFill style={{ overflow: "hidden" }}>
@@ -186,7 +148,6 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
         </Sequence>
       )}
 
-      {/* Camada 2: Motion Graphics */}
       {showAnimations && motion_graphics.map((mg) => (
         <Sequence 
           key={mg.id} 
@@ -197,7 +158,6 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
         </Sequence>
       ))}
 
-      {/* Camada 3: Legendas Dinâmicas (Side-by-Side ou Clássica Dan Koe) */}
       {showSubtitles && (
         <AbsoluteFill style={{ pointerEvents: "none" }}>
           {subtitles.map((s, i) => {
@@ -205,15 +165,12 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               
               const isSide = layout?.style === "side" && layout?.person_box;
 
-              // --- MODO CLÁSSICO (Fallback / TikTok Minimalist Rítmico) ---
               if (!isSide) {
                   const classicChunks: {words: typeof s.words, start: number, end: number}[] = [];
                   let currentLine: typeof s.words = [];
 
                   s.words.forEach((w, idx) => {
                       const lastWord = currentLine[currentLine.length - 1];
-                      
-                      // Condições para fechar o bloco (RITMO):
                       const isTooLong = currentLine.length >= 5;
                       const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
                       const isPause = lastWord && (w.start - lastWord.end > 0.4);
@@ -222,7 +179,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                           classicChunks.push({
                               words: currentLine,
                               start: currentLine[0].start,
-                              end: lastWord.end // Termina EXATAMENTE quando a última palavra do bloco acaba
+                              end: lastWord.end
                           });
                           currentLine = [w];
                       } else {
@@ -244,15 +201,11 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       from={Math.round(chunk.start * fps)}
                       durationInFrames={Math.max(1, Math.round((chunk.end - chunk.start) * fps))}
                     >
-                      <TikTokSubtitle 
-                        words={chunk.words} 
-                        time={time}
-                      />
+                      <TikTokSubtitle words={chunk.words} time={time} />
                     </Sequence>
                   ));
               }
 
-              // --- MODO SIDE-BY-SIDE (Otimizado para Horizontal) ---
               const personX = layout.person_box.x * width;
               const personWidth = (layout.person_box.width * 0.5) * width;
               const leftEdge = personX - personWidth/2 - 30;
@@ -262,7 +215,6 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               const rightMaxWidth = Math.max(100, (width - rightEdge) - edgeMargin);
               const fontSize = width * 0.045;
 
-              // Agrupar palavras em blocos (chunks) menores
               const wordChunks: {words: typeof s.words, start: number, end: number}[] = [];
               let currentChunk: typeof s.words = [];
               let currentCharCount = 0;
@@ -309,70 +261,17 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       layout="none"
                     >
                       <AbsoluteFill style={{ top: height * 0.4 }}>
-                        {/* Lado Esquerdo */}
-                        <div style={{
-                            position: "absolute",
-                            right: width - leftEdge,
-                            width: leftMaxWidth,
-                            textAlign: "right",
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            alignItems: "center",
-                            transform: `scale(${leftScale})`,
-                            transformOrigin: "right center"
-                        }}>
-                            <h1 style={{
-                                color: "#FFFF00",
-                                fontSize,
-                                fontFamily: "system-ui, -apple-system, sans-serif",
-                                fontWeight: 800,
-                                margin: 0,
-                                textShadow: "0 2px 10px rgba(0,0,0,0.8)",
-                                lineHeight: 1.1,
-                                whiteSpace: "nowrap"
-                            }}>
+                        <div style={{ position: "absolute", right: width - leftEdge, width: leftMaxWidth, textAlign: "right", display: "flex", justifyContent: "flex-end", alignItems: "center", transform: `scale(${leftScale})`, transformOrigin: "right center" }}>
+                            <h1 style={{ color: "#FFFF00", fontSize, fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 800, margin: 0, textShadow: "0 2px 10px rgba(0,0,0,0.8)", lineHeight: 1.1, whiteSpace: "nowrap" }}>
                                 {leftHalf.map((w, k) => (
-                                    <span key={k} style={{ 
-                                        opacity: time >= w.start ? 1 : 0,
-                                        display: "inline-block",
-                                        marginRight: "0.25em"
-                                    }}>
-                                        {w.text}
-                                    </span>
+                                    <span key={k} style={{ opacity: time >= w.start ? 1 : 0, display: "inline-block", marginRight: "0.25em" }}>{w.text}</span>
                                 ))}
                             </h1>
                         </div>
-
-                        {/* Lado Direito */}
-                        <div style={{
-                            position: "absolute",
-                            left: rightEdge,
-                            width: rightMaxWidth,
-                            textAlign: "left",
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "center",
-                            transform: `scale(${rightScale})`,
-                            transformOrigin: "left center"
-                        }}>
-                            <h1 style={{
-                                color: "#FFFF00",
-                                fontSize,
-                                fontFamily: "system-ui, -apple-system, sans-serif",
-                                fontWeight: 800,
-                                margin: 0,
-                                textShadow: "0 2px 10px rgba(0,0,0,0.8)",
-                                lineHeight: 1.1,
-                                whiteSpace: "nowrap"
-                            }}>
+                        <div style={{ position: "absolute", left: rightEdge, width: rightMaxWidth, textAlign: "left", display: "flex", justifyContent: "flex-start", alignItems: "center", transform: `scale(${rightScale})`, transformOrigin: "left center" }}>
+                            <h1 style={{ color: "#FFFF00", fontSize, fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 800, margin: 0, textShadow: "0 2px 10px rgba(0,0,0,0.8)", lineHeight: 1.1, whiteSpace: "nowrap" }}>
                                 {rightHalf.map((w, k) => (
-                                    <span key={k} style={{ 
-                                        opacity: time >= w.start ? 1 : 0,
-                                        display: "inline-block",
-                                        marginRight: "0.25em"
-                                    }}>
-                                        {w.text}
-                                    </span>
+                                    <span key={k} style={{ opacity: time >= w.start ? 1 : 0, display: "inline-block", marginRight: "0.25em" }}>{w.text}</span>
                                 ))}
                             </h1>
                         </div>
@@ -383,7 +282,6 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
           })}
         </AbsoluteFill>
       )}
-
     </AbsoluteFill>
   );
 };

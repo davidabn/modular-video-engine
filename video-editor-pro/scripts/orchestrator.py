@@ -86,9 +86,9 @@ def run_processor(input_video, project_dir, min_silence_ms=500, only_cut=False, 
     return json.loads(json_line) if json_line else None
 
 def apply_trim(video_path, project_dir, start_frame=None, end_frame=None):
-    """Corta o v\u00eddeo baseado em frames."""
+    """Corta o vídeo baseado em frames."""
     print(f"\nTrimming video (frames {start_frame} to {end_frame})...")
-    fps = 60 # Default for this project
+    _, _, fps = get_video_dimensions(video_path)
     
     start_time = (start_frame / fps) if start_frame is not None else 0
     
@@ -96,7 +96,6 @@ def apply_trim(video_path, project_dir, start_frame=None, end_frame=None):
     output_trimmed = os.path.join(project_dir, f"{base_name}_trimmed.mp4")
     
     # Construir comando FFmpeg
-    # Usamos -ss para o início e -to ou -t para a duração/fim
     cmd = f"ffmpeg -i \"{video_path}\" -ss {start_time}"
     if end_frame is not None:
         end_time = end_frame / fps
@@ -113,7 +112,7 @@ def apply_zoom_ffmpeg(video_path, transcript_path, project_dir, zoom_factor=1.3)
     with open(transcript_path, 'r') as f:
         transcript = json.load(f)
     
-    fps = 60
+    width, height, fps = get_video_dimensions(video_path)
     # Criamos a máscara de seleção
     select_parts = []
     for i, seg in enumerate(transcript['segments']):
@@ -127,11 +126,10 @@ def apply_zoom_ffmpeg(video_path, transcript_path, project_dir, zoom_factor=1.3)
     
     if select_parts:
         cond = "+".join(select_parts)
-        # Abordagem: Criamos duas versões do mesmo vídeo no filter_complex e escolhemos qual mostrar
         # v0 = original, v1 = zoomado
         filter_complex = (
             f"[0:v]split[v0][v1];"
-            f"[v1]crop=iw/{zoom_factor}:ih/{zoom_factor}:(iw-out_w)/2:(ih-out_h)/2,scale=1080:1920[v1_z];"
+            f"[v1]crop=iw/{zoom_factor}:ih/{zoom_factor}:(iw-out_w)/2:(ih-out_h)/2,scale={width}:{height}[v1_z];"
             f"[v0][v1_z]overlay=enable='{cond}'[v_final]"
         )
         
@@ -205,15 +203,20 @@ def update_remotion_config(state):
     person_box = transcript.get("person_box", {"x": 0.5, "width": 0.3})
     
     if state["features"]["subtitles"] or state["features"]["side_captions"]:
+        # Adicionamos um pequeno offset (ex: 0.15s) para compensar o atraso do vídeo processado
+        # em relação aos timestamps do AssemblyAI/Whisper.
+        SYNC_OFFSET = 0.15 
+
         for seg in transcript['segments']:
-            # Encontrar as palavras que pertencem a este segmento para precis\u00e3o total
+            # Encontrar as palavras que pertencem a este segmento para precisão total
             seg_words = [
-                w for w in transcript.get('words', [])
+                {**w, 'start': w['start'] + SYNC_OFFSET, 'end': w['end'] + SYNC_OFFSET} 
+                for w in transcript.get('words', [])
                 if w['start'] >= seg['start'] - 0.1 and w['end'] <= seg['end'] + 0.1
             ]
             subtitles.append({
-                'start': seg['start'], 
-                'end': seg['end'], 
+                'start': seg['start'] + SYNC_OFFSET, 
+                'end': seg['end'] + SYNC_OFFSET, 
                 'text': seg['text'].strip(),
                 'words': seg_words
             })
