@@ -1,10 +1,10 @@
 {
   "input_video": "david-abn.MOV",
-  "processed_video": "david-abn.MOV",
-  "transcript_path": "/Users/davidabn/editor-master/projects/david-abn/david-abn_transcript.json",
+  "processed_video": "/Users/davidabn/editor-master/projects/david-abn/david-abn_no_silence.mp4",
+  "transcript_path": "/Users/davidabn/editor-master/projects/david-abn/david-abn_no_silence_transcript.json",
   "project_dir": "projects/david-abn",
   "features": {
-    "silence_removal": false,
+    "silence_removal": true,
     "zoom": false,
     "subtitles": true,
     "animations": false,

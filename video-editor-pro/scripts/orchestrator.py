@@ -203,8 +203,8 @@ def update_remotion_config(state):
     person_box = transcript.get("person_box", {"x": 0.5, "width": 0.3})
     
     if state["features"]["subtitles"] or state["features"]["side_captions"]:
-        # SYNC_OFFSET: Aumentado para 0.25s para garantir que a legenda não antecipe a fala.
-        SYNC_OFFSET = 0.25 
+        # SYNC_OFFSET: Reduzido para 0.1s para evitar atraso excessivo.
+        SYNC_OFFSET = 0.1 
 
         for seg in transcript['segments']:
             seg_words = [

@@ -1,176 +1,164 @@
 {
-  "video_path": "david-abn.MOV",
+  "video_path": "david-abn_no_silence.mp4",
   "width": 1080,
   "height": 1920,
-  "fps": 60.0,
-  "duration": 14.651,
+  "fps": 59.89983305509182,
+  "duration": 9.491,
   "subtitles": [
     {
-      "start": 0.031,
-      "end": 4.131,
-      "text": "gravando um v\u00eddeo aqui pra mandar pro Kauli s\u00f3 pra...",
+      "start": 0.131,
+      "end": 9.491,
+      "text": "gravando um v\u00eddeo aqui pra mandar pro Kauly s\u00f3 pra gente testar a\u00ed eu fiquei um pouco de sil\u00eancio aqui mas eles falaram ali vamos ver s\u00f3 pra testar, beleza?",
       "words": [
         {
           "text": "gravando",
-          "start": 0.031,
-          "end": 1.031
+          "start": 0.131,
+          "end": 0.43100000000000005
         },
         {
           "text": "um",
-          "start": 1.031,
-          "end": 1.171
+          "start": 0.43100000000000005,
+          "end": 0.571
         },
         {
           "text": "v\u00eddeo",
-          "start": 1.171,
-          "end": 1.391
+          "start": 0.571,
+          "end": 0.7909999999999999
         },
         {
           "text": "aqui",
-          "start": 1.391,
-          "end": 1.651
+          "start": 0.7909999999999999,
+          "end": 1.051
         },
         {
           "text": "pra",
-          "start": 1.651,
-          "end": 1.831
+          "start": 1.051,
+          "end": 1.231
         },
         {
           "text": "mandar",
-          "start": 1.831,
-          "end": 2.031
+          "start": 1.231,
+          "end": 1.411
         },
         {
           "text": "pro",
-          "start": 2.031,
-          "end": 2.191
+          "start": 1.411,
+          "end": 1.5910000000000002
         },
         {
-          "text": "Kauli",
-          "start": 2.191,
-          "end": 2.571
+          "text": "Kauly",
+          "start": 1.5910000000000002,
+          "end": 1.971
         },
         {
           "text": "s\u00f3",
-          "start": 2.571,
-          "end": 3.291
+          "start": 1.971,
+          "end": 2.6710000000000003
         },
         {
-          "text": "pra...",
-          "start": 3.291,
-          "end": 4.131
-        }
-      ]
-    },
-    {
-      "start": 4.131,
-      "end": 14.651,
-      "text": "pra gente testar a\u00ed eu fiquei um pouco de sil\u00eancio aqui mas eles falaram ali vamos ver s\u00f3 pra testar, beleza?",
-      "words": [
-        {
           "text": "pra",
-          "start": 4.131,
-          "end": 4.351
+          "start": 2.6710000000000003,
+          "end": 3.011
         },
         {
           "text": "gente",
-          "start": 4.351,
-          "end": 4.631
+          "start": 3.011,
+          "end": 3.991
         },
         {
           "text": "testar",
-          "start": 4.631,
-          "end": 5.371
+          "start": 3.991,
+          "end": 4.771
         },
         {
           "text": "a\u00ed",
-          "start": 5.371,
-          "end": 7.071
+          "start": 4.771,
+          "end": 5.670999999999999
         },
         {
           "text": "eu",
-          "start": 7.071,
-          "end": 9.131
+          "start": 5.670999999999999,
+          "end": 5.8709999999999996
         },
         {
           "text": "fiquei",
-          "start": 9.131,
-          "end": 9.371
+          "start": 5.8709999999999996,
+          "end": 6.111
         },
         {
           "text": "um",
-          "start": 9.371,
-          "end": 9.471
+          "start": 6.111,
+          "end": 6.210999999999999
         },
         {
           "text": "pouco",
-          "start": 9.471,
-          "end": 9.591
+          "start": 6.210999999999999,
+          "end": 6.3309999999999995
         },
         {
           "text": "de",
-          "start": 9.591,
-          "end": 9.731
+          "start": 6.3309999999999995,
+          "end": 6.471
         },
         {
           "text": "sil\u00eancio",
-          "start": 9.731,
-          "end": 10.011
+          "start": 6.471,
+          "end": 6.7509999999999994
         },
         {
           "text": "aqui",
-          "start": 10.011,
-          "end": 10.211
+          "start": 6.7509999999999994,
+          "end": 6.951
         },
         {
           "text": "mas",
-          "start": 10.211,
-          "end": 10.371
+          "start": 6.951,
+          "end": 7.090999999999999
         },
         {
           "text": "eles",
-          "start": 10.371,
-          "end": 10.551
+          "start": 7.090999999999999,
+          "end": 7.271
         },
         {
           "text": "falaram",
-          "start": 10.551,
-          "end": 10.871
+          "start": 7.271,
+          "end": 7.611
         },
         {
           "text": "ali",
-          "start": 10.871,
-          "end": 11.131
+          "start": 7.611,
+          "end": 7.8309999999999995
         },
         {
           "text": "vamos",
-          "start": 11.131,
-          "end": 13.311
+          "start": 7.8309999999999995,
+          "end": 8.190999999999999
         },
         {
           "text": "ver",
-          "start": 13.311,
-          "end": 13.531
+          "start": 8.190999999999999,
+          "end": 8.411
         },
         {
           "text": "s\u00f3",
-          "start": 13.531,
-          "end": 13.711
+          "start": 8.411,
+          "end": 8.591
         },
         {
           "text": "pra",
-          "start": 13.711,
-          "end": 13.891
+          "start": 8.591,
+          "end": 8.751
         },
         {
           "text": "testar,",
-          "start": 13.891,
-          "end": 14.331
+          "start": 8.751,
+          "end": 9.190999999999999
         },
         {
           "text": "beleza?",
-          "start": 14.511,
-          "end": 14.651
+          "start": 9.411,
+          "end": 9.491
         }
       ]
     }
@@ -178,7 +166,7 @@
   "layout": {
     "style": "center",
     "person_box": {
-      "x": 0.4905615292712066,
+      "x": 0.4890509259259259,
       "width": 0.6
     }
   },

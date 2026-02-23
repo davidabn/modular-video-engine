@@ -14,9 +14,14 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   
+  // TRAVA DE SEGURANÇA: Se o tempo atual passou do fim da última palavra, não mostra nada.
+  // Isso garante que a legenda suma no milésimo que você parou de falar.
+  const lastWordEnd = words[words.length - 1]?.end || 0;
+  if (time > lastWordEnd) return null;
+
   const springConfig = {
     damping: 12,
-    stiffness: 100,
+    stiffness: 200, 
     mass: 0.5,
   };
   
@@ -51,7 +56,7 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
               fontSize: "4.2rem",
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 900,
-              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, -2px 2px 0 #000",
+              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
               WebkitTextStroke: "2px black",
               paintOrder: "stroke fill",
               whiteSpace: "nowrap"
@@ -152,7 +157,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
         <Sequence 
           key={mg.id} 
           from={Math.round(mg.start_time * fps)}
-          durationInFrames={Math.round(mg.duration * fps)}
+          durationInFrames={Math.max(1, Math.round(mg.duration * fps))}
         >
           <Scene mg={mg} />
         </Sequence>
@@ -171,9 +176,14 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
 
                   s.words.forEach((w, idx) => {
                       const lastWord = currentLine[currentLine.length - 1];
-                      const isTooLong = currentLine.length >= 5;
+                      
+                      // RITMO SENSÍVEL:
+                      // 1. Limite de 6 palavras (mais flexível)
+                      // 2. Pontuação forte (.?!)
+                      // 3. Pausa de 0.15s (antes era 0.2s)
+                      const isTooLong = currentLine.length >= 6;
                       const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
-                      const isPause = lastWord && (w.start - lastWord.end > 0.2); // Reduzido para 0.2s
+                      const isPause = lastWord && (w.start - lastWord.end > 0.15);
 
                       if (lastWord && (isTooLong || hasPunctuation || isPause)) {
                           classicChunks.push({
@@ -195,17 +205,27 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       });
                   }
 
-                  return classicChunks.map((chunk, chunkIdx) => (
-                    <Sequence 
-                      key={`classic-sub-${i}-${chunkIdx}`} 
-                      from={Math.round(chunk.start * fps)}
-                      durationInFrames={Math.max(1, Math.round((chunk.end - chunk.start) * fps))}
-                    >
-                      <TikTokSubtitle words={chunk.words} time={time} />
-                    </Sequence>
-                  ));
+                  return classicChunks.map((chunk, chunkIdx) => {
+                    const mgActiveInChunk = motion_graphics.some(mg => 
+                        (chunk.start >= mg.start_time && chunk.start < mg.start_time + mg.duration) ||
+                        (chunk.end > mg.start_time && chunk.end <= mg.start_time + mg.duration)
+                    );
+
+                    if (mgActiveInChunk) return null;
+
+                    return (
+                        <Sequence 
+                            key={`classic-sub-${i}-${chunkIdx}`} 
+                            from={Math.round(chunk.start * fps)}
+                            durationInFrames={Math.max(1, Math.round((chunk.end - chunk.start) * fps))}
+                        >
+                            <TikTokSubtitle words={chunk.words} time={time} />
+                        </Sequence>
+                    );
+                  });
               }
 
+              // --- Lógica de Side Captions mantida abaixo ---
               const personX = layout.person_box.x * width;
               const personWidth = (layout.person_box.width * 0.5) * width;
               const leftEdge = personX - personWidth/2 - 30;
@@ -246,12 +266,8 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                   const leftHalf = chunk.words.slice(0, midIdx);
                   const rightHalf = chunk.words.slice(midIdx);
 
-                  const leftText = leftHalf.map(w => w.text).join(" ");
-                  const rightText = rightHalf.map(w => w.text).join(" ");
-
-                  const estimateWidth = (text: string, fSize: number) => text.length * (fSize * 0.55);
-                  const leftScale = Math.min(1, leftMaxWidth / estimateWidth(leftText, fontSize));
-                  const rightScale = Math.min(1, rightMaxWidth / estimateWidth(rightText, fontSize));
+                  const leftScale = Math.min(1, leftMaxWidth / (leftHalf.map(w => w.text).join(" ").length * (fontSize * 0.55)));
+                  const rightScale = Math.min(1, rightMaxWidth / (rightHalf.map(w => w.text).join(" ").length * (fontSize * 0.55)));
 
                   return (
                     <Sequence 
