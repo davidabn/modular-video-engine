@@ -211,9 +211,6 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       const lastWord = currentLine[currentLine.length - 1];
                       
                       // Condições para fechar o bloco (RITMO):
-                      // 1. Já temos 5 palavras
-                      // 2. A última palavra teve uma pontuação forte (. ? !)
-                      // 3. Há um silêncio significativo (> 0.4s) até a próxima palavra
                       const isTooLong = currentLine.length >= 5;
                       const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
                       const isPause = lastWord && (w.start - lastWord.end > 0.4);
@@ -222,7 +219,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                           classicChunks.push({
                               words: currentLine,
                               start: currentLine[0].start,
-                              end: isPause ? lastWord.end + 0.1 : w.start // Se for pausa, limpa a tela logo após a última palavra
+                              end: lastWord.end // Termina EXATAMENTE quando a última palavra do bloco acaba
                           });
                           currentLine = [w];
                       } else {
