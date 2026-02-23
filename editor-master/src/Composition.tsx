@@ -11,11 +11,9 @@ interface Subtitle {
 
 // --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Minimalist Rítmico) ---
 const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: number }[]; time: number }> = ({ words, time }) => {
-  const { fps } = useVideoConfig();
+  const { fps, width } = useVideoConfig();
   const frame = useCurrentFrame();
   
-  // TRAVA DE SEGURANÇA: Se o tempo atual passou do fim da última palavra, não mostra nada.
-  // Isso garante que a legenda suma no milésimo que você parou de falar.
   const lastWordEnd = words[words.length - 1]?.end || 0;
   if (time > lastWordEnd) return null;
 
@@ -31,6 +29,13 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
     config: springConfig,
   });
 
+  // Cálculo de Auto-Escala para não vazar da tela
+  const fullText = words.map(w => w.text).join(" ");
+  const baseFontSize = 4.2 * 16; // 4.2rem em pixels (aprox)
+  const estimatedWidth = fullText.length * (baseFontSize * 0.6); // Estimativa conservadora
+  const maxWidth = width * 0.9; // 90% da largura da tela
+  const autoScale = Math.min(1, maxWidth / estimatedWidth);
+
   return (
     <AbsoluteFill style={{ 
       justifyContent: "center", 
@@ -38,7 +43,7 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
       top: "55%", 
       height: "fit-content",
       pointerEvents: "none",
-      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1])})`,
+      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1]) * autoScale})`, // Aplica auto-escala aqui
       opacity: pop
     }}>
       <div style={{
