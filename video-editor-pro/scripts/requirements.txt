@@ -1,0 +1,8 @@
+torch
+torchaudio
+openai-whisper
+ffmpeg-python
+numpy
+mediapipe
+opencv-python
+assemblyai\npython-dotenv

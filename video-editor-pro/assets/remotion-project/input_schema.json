@@ -1,0 +1,33 @@
+{
+  "description": "Schema for the Remotion video composition input",
+  "type": "object",
+  "properties": {
+    "video_path": { "type": "string", "description": "Absolute path to the silence-removed video" },
+    "subtitles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "start": { "type": "number", "description": "Start time in seconds" },
+          "end": { "type": "number", "description": "End time in seconds" },
+          "text": { "type": "string" }
+        }
+      }
+    },
+    "motion_graphics": {
+      "type": "array",
+      "description": "List of visual elements to overlay",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Unique ID for the element" },
+          "type": { "type": "string", "enum": ["text_highlight", "image_pop", "icon", "lower_third"] },
+          "content": { "type": "string", "description": "Text content or asset path" },
+          "start_time": { "type": "number", "description": "Start time in seconds" },
+          "duration": { "type": "number", "description": "Duration in seconds" },
+          "animation_style": { "type": "string", "enum": ["fade", "slide", "pop", "scale"] }
+        }
+      }
+    }
+  }
+}

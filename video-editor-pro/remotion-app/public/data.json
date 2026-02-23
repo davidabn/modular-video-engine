@@ -1,0 +1,49 @@
+{
+  "video_path": "/Users/davidabn/video_david_fac_no_silence.mp4",
+  "subtitles": [
+    {
+      "start": 0.0,
+      "end": 5.0,
+      "text": "e não é só pra ver se as legenda das aulas vão estar passando aqui",
+      "position": "lateral"
+    },
+    {
+      "start": 5.0,
+      "end": 10.0,
+      "text": "e ali, só pra ver se é a parte do lá, e no sistema compreendeu o site",
+      "position": "lateral"
+    },
+    {
+      "start": 10.0,
+      "end": 13.0,
+      "text": "então só tô falando que só pra gente testar, beleza?",
+      "position": "lateral"
+    }
+  ],
+  "motion_graphics": [
+    {
+      "id": "book_icon",
+      "type": "icon",
+      "content": "📖",
+      "start_time": 1.0,
+      "duration": 3.0,
+      "animation_style": "pop"
+    },
+    {
+      "id": "web_icon",
+      "type": "icon",
+      "content": "🌐",
+      "start_time": 6.0,
+      "duration": 3.0,
+      "animation_style": "pop"
+    },
+    {
+      "id": "success_pop",
+      "type": "text_highlight",
+      "content": "SUCCESS!",
+      "start_time": 11.0,
+      "duration": 2.0,
+      "animation_style": "scale"
+    }
+  ]
+}

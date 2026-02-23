@@ -1,0 +1,22 @@
+# Video and Log files
+*.MOV
+*.mov
+*.mp4
+*.log
+editor-master/public/*.mp4
+editor-master/public/*.MOV
+editor-master/public/*.mov
+
+# Projects output
+projects/
+!projects/.gitkeep
+
+# Environments
+venv/
+node_modules
+dist
+.DS_Store
+.env
+
+# Ignore the output video from Git but not videos you import into src/.
+out

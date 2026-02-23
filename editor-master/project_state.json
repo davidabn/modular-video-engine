@@ -1,0 +1,13 @@
+{
+  "input_video": "falcon.MOV",
+  "processed_video": "projects/falcon/falcon_no_silence_trimmed.mp4",
+  "transcript_path": "/Users/davidabn/editor-master/projects/falcon/falcon_no_silence_transcript.json",
+  "project_dir": "projects/falcon",
+  "features": {
+    "silence_removal": true,
+    "zoom": false,
+    "subtitles": true,
+    "animations": false,
+    "side_captions": true
+  }
+}
