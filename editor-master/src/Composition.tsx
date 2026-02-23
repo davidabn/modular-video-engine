@@ -1,6 +1,6 @@
 import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig, staticFile, Sequence, interpolate } from "remotion";
 import React from "react";
-import { Scene, DanKoeWordByWord } from "./components/MotionGraphics";
+import { Scene } from "./components/MotionGraphics";
 
 interface Subtitle {
   start: number;
@@ -8,6 +8,46 @@ interface Subtitle {
   text: string;
   words?: { text: string; start: number; end: number }[];
 }
+
+// --- COMPONENTE DE LEGENDA CLÁSSICA (TikTok Style) ---
+const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: number }[]; time: number }> = ({ words, time }) => {
+  return (
+    <AbsoluteFill style={{ 
+      justifyContent: "center", 
+      alignItems: "center", 
+      bottom: "20%", 
+      height: "fit-content",
+      pointerEvents: "none"
+    }}>
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        gap: "10px",
+        maxWidth: "90%",
+        textAlign: "center"
+      }}>
+        {words.map((w, i) => {
+          const isCurrent = time >= w.start && time < w.end;
+          return (
+            <span key={i} style={{
+              color: isCurrent ? "#FFFF00" : "white", // Amarelo quando falado, Branco no resto
+              fontSize: "4.5rem",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              fontWeight: 900,
+              textTransform: "uppercase",
+              textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
+              WebkitTextStroke: "2px black",
+              paintOrder: "stroke fill"
+            }}>
+              {w.text}
+            </span>
+          );
+        })}
+      </div>
+    </AbsoluteFill>
+  );
+};
 
 interface MotionGraphic {
   id: string;
@@ -145,7 +185,7 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               
               const isSide = layout?.style === "side" && layout?.person_box;
 
-              // --- MODO CLÁSSICO (Fallback / Padrão) ---
+              // --- MODO CLÁSSICO (Fallback / TikTok Padrão) ---
               if (!isSide) {
                   return (
                     <Sequence 
@@ -153,10 +193,9 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
                       from={Math.round(s.start * fps)}
                       durationInFrames={Math.max(1, Math.round((s.end - s.start) * fps))}
                     >
-                      <DanKoeWordByWord 
+                      <TikTokSubtitle 
                         words={s.words} 
-                        sceneStart={s.start} 
-                        sfx={staticFile("soundfx/pop-up/tech-pop.mp3")} 
+                        time={time}
                       />
                     </Sequence>
                   );

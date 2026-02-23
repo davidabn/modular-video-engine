@@ -1,13 +1,13 @@
 {
-  "input_video": "falcon.MOV",
-  "processed_video": "projects/falcon/falcon_no_silence_trimmed.mp4",
-  "transcript_path": "/Users/davidabn/editor-master/projects/falcon/falcon_no_silence_transcript.json",
-  "project_dir": "projects/falcon",
+  "input_video": "david-abn.MOV",
+  "processed_video": "david-abn.MOV",
+  "transcript_path": "/Users/davidabn/editor-master/projects/david-abn/david-abn_transcript.json",
+  "project_dir": "projects/david-abn",
   "features": {
-    "silence_removal": true,
+    "silence_removal": false,
     "zoom": false,
     "subtitles": true,
     "animations": false,
-    "side_captions": true
+    "side_captions": false
   }
 }

@@ -1,195 +1,187 @@
 {
-  "video_path": "falcon_no_silence_trimmed.mp4",
-  "width": 1920,
-  "height": 1080,
-  "fps": 59.81544443082905,
-  "duration": 7.447666666666667,
+  "video_path": "david-abn.MOV",
+  "width": 1080,
+  "height": 1920,
+  "fps": 60.0,
+  "duration": 14.651,
   "subtitles": [
     {
-      "start": 0,
-      "end": 7.447666666666667,
-      "text": "agora eu vou deixar uma pausa recuperando a pausa eu estou olhando para a c\u00e2mera porque a gente quer fazer um teste da hora teste drive, mais uma pausa, pronto",
+      "start": 0.031,
+      "end": 4.131,
+      "text": "gravando um v\u00eddeo aqui pra mandar pro Kauli s\u00f3 pra...",
       "words": [
         {
-          "text": "agora",
-          "start": 0,
-          "end": 0
-        },
-        {
-          "text": "eu",
-          "start": 0,
-          "end": 0
-        },
-        {
-          "text": "vou",
-          "start": 0,
-          "end": 0
-        },
-        {
-          "text": "deixar",
-          "start": 0,
-          "end": 0
-        },
-        {
-          "text": "uma",
-          "start": 0,
-          "end": 0.0076666666666667105
-        },
-        {
-          "text": "pausa",
-          "start": 0.0076666666666667105,
-          "end": 0.5276666666666667
-        },
-        {
-          "text": "recuperando",
-          "start": 0.5276666666666667,
-          "end": 1.3276666666666666
-        },
-        {
-          "text": "a",
-          "start": 1.3276666666666666,
-          "end": 1.5076666666666667
-        },
-        {
-          "text": "pausa",
-          "start": 1.5076666666666667,
-          "end": 1.8076666666666665
-        },
-        {
-          "text": "eu",
-          "start": 1.8076666666666665,
-          "end": 1.9676666666666667
-        },
-        {
-          "text": "estou",
-          "start": 1.9676666666666667,
-          "end": 2.127666666666667
-        },
-        {
-          "text": "olhando",
-          "start": 2.127666666666667,
-          "end": 2.3876666666666666
-        },
-        {
-          "text": "para",
-          "start": 2.3876666666666666,
-          "end": 2.5676666666666668
-        },
-        {
-          "text": "a",
-          "start": 2.5676666666666668,
-          "end": 2.747666666666667
-        },
-        {
-          "text": "c\u00e2mera",
-          "start": 2.747666666666667,
-          "end": 3.0476666666666667
-        },
-        {
-          "text": "porque",
-          "start": 3.0476666666666667,
-          "end": 3.627666666666667
-        },
-        {
-          "text": "a",
-          "start": 3.627666666666667,
-          "end": 3.947666666666667
-        },
-        {
-          "text": "gente",
-          "start": 3.947666666666667,
-          "end": 4.027666666666667
-        },
-        {
-          "text": "quer",
-          "start": 4.027666666666667,
-          "end": 4.107666666666667
-        },
-        {
-          "text": "fazer",
-          "start": 4.107666666666667,
-          "end": 4.347666666666667
+          "text": "gravando",
+          "start": 0.031,
+          "end": 1.031
         },
         {
           "text": "um",
-          "start": 4.347666666666667,
-          "end": 4.487666666666668
+          "start": 1.031,
+          "end": 1.171
         },
         {
-          "text": "teste",
-          "start": 4.487666666666668,
-          "end": 4.747666666666667
+          "text": "v\u00eddeo",
+          "start": 1.171,
+          "end": 1.391
         },
         {
-          "text": "da",
-          "start": 4.747666666666667,
-          "end": 4.927666666666667
+          "text": "aqui",
+          "start": 1.391,
+          "end": 1.651
         },
         {
-          "text": "hora",
-          "start": 4.927666666666667,
-          "end": 5.247666666666667
+          "text": "pra",
+          "start": 1.651,
+          "end": 1.831
         },
         {
-          "text": "teste",
-          "start": 5.247666666666667,
-          "end": 5.767666666666667
+          "text": "mandar",
+          "start": 1.831,
+          "end": 2.031
         },
         {
-          "text": "drive,",
-          "start": 5.767666666666667,
-          "end": 6.187666666666667
+          "text": "pro",
+          "start": 2.031,
+          "end": 2.191
         },
         {
-          "text": "mais",
-          "start": 6.327666666666667,
-          "end": 6.467666666666666
+          "text": "Kauli",
+          "start": 2.191,
+          "end": 2.571
         },
         {
-          "text": "uma",
-          "start": 6.467666666666666,
-          "end": 6.687666666666667
+          "text": "s\u00f3",
+          "start": 2.571,
+          "end": 3.291
         },
         {
-          "text": "pausa,",
-          "start": 6.687666666666667,
-          "end": 6.967666666666668
+          "text": "pra...",
+          "start": 3.291,
+          "end": 4.131
+        }
+      ]
+    },
+    {
+      "start": 4.131,
+      "end": 14.651,
+      "text": "pra gente testar a\u00ed eu fiquei um pouco de sil\u00eancio aqui mas eles falaram ali vamos ver s\u00f3 pra testar, beleza?",
+      "words": [
+        {
+          "text": "pra",
+          "start": 4.131,
+          "end": 4.351
         },
         {
-          "text": "pronto",
-          "start": 7.187666666666667,
-          "end": 7.447666666666667
+          "text": "gente",
+          "start": 4.351,
+          "end": 4.631
+        },
+        {
+          "text": "testar",
+          "start": 4.631,
+          "end": 5.371
+        },
+        {
+          "text": "a\u00ed",
+          "start": 5.371,
+          "end": 7.071
+        },
+        {
+          "text": "eu",
+          "start": 7.071,
+          "end": 9.131
+        },
+        {
+          "text": "fiquei",
+          "start": 9.131,
+          "end": 9.371
+        },
+        {
+          "text": "um",
+          "start": 9.371,
+          "end": 9.471
+        },
+        {
+          "text": "pouco",
+          "start": 9.471,
+          "end": 9.591
+        },
+        {
+          "text": "de",
+          "start": 9.591,
+          "end": 9.731
+        },
+        {
+          "text": "sil\u00eancio",
+          "start": 9.731,
+          "end": 10.011
+        },
+        {
+          "text": "aqui",
+          "start": 10.011,
+          "end": 10.211
+        },
+        {
+          "text": "mas",
+          "start": 10.211,
+          "end": 10.371
+        },
+        {
+          "text": "eles",
+          "start": 10.371,
+          "end": 10.551
+        },
+        {
+          "text": "falaram",
+          "start": 10.551,
+          "end": 10.871
+        },
+        {
+          "text": "ali",
+          "start": 10.871,
+          "end": 11.131
+        },
+        {
+          "text": "vamos",
+          "start": 11.131,
+          "end": 13.311
+        },
+        {
+          "text": "ver",
+          "start": 13.311,
+          "end": 13.531
+        },
+        {
+          "text": "s\u00f3",
+          "start": 13.531,
+          "end": 13.711
+        },
+        {
+          "text": "pra",
+          "start": 13.711,
+          "end": 13.891
+        },
+        {
+          "text": "testar,",
+          "start": 13.891,
+          "end": 14.331
+        },
+        {
+          "text": "beleza?",
+          "start": 14.511,
+          "end": 14.651
         }
       ]
     }
   ],
   "layout": {
-    "style": "side",
+    "style": "center",
     "person_box": {
-      "x": 0.4972861842105263,
+      "x": 0.4905615292712066,
       "width": 0.6
     }
   },
-  "motion_graphics": [
-    {
-      "id": "mg-test-drive",
-      "type": "TestDrive",
-      "content": "teste drive",
-      "start_time": 5.2,
-      "duration": 1.3,
-      "words": [
-        {
-          "text": "teste",
-          "start": 5.247666666666667,
-          "end": 5.767666666666667
-        },
-        {
-          "text": "drive",
-          "start": 5.767666666666667,
-          "end": 6.187666666666667
-        }
-      ]
-    }
-  ],
+  "motion_graphics": [],
   "renderMode": "preview"
 }
