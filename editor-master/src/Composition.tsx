@@ -15,7 +15,6 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
   const { fps } = useVideoConfig();
   const frame = useCurrentFrame();
   
-  // A animação de pop-up baseada no início da sequência (frame 0 da linha atual)
   const springConfig = {
     damping: 12,
     stiffness: 100,
@@ -32,29 +31,27 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
     <AbsoluteFill style={{ 
       justifyContent: "center", 
       alignItems: "center", 
-      top: "10%", // Levemente abaixo do centro (50% + 10%)
+      top: "55%", // Agora sim: um pouco abaixo do centro (50% + 5%)
       height: "fit-content",
       pointerEvents: "none",
-      transform: `scale(${interpolate(pop, [0, 1], [0.8, 1])})`,
+      transform: `scale(${interpolate(pop, [0, 1], [0.9, 1])})`, // Escala mais sutil
       opacity: pop
     }}>
       <div style={{
         display: "flex",
-        flexWrap: "nowrap", // Força uma única linha
+        flexWrap: "nowrap",
         justifyContent: "center",
         gap: "12px",
         maxWidth: "95%",
         textAlign: "center"
       }}>
         {words.map((w, i) => {
-          const isCurrent = time >= w.start && time < w.end;
           return (
             <span key={i} style={{
-              color: isCurrent ? "#FFFF00" : "white",
+              color: "white", // Tudo branco, sem destaque amarelo
               fontSize: "4.2rem",
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 900,
-              // Removido uppercase para seguir o padrão do usuário
               textShadow: "0 4px 10px rgba(0,0,0,0.8), -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000",
               WebkitTextStroke: "2px black",
               paintOrder: "stroke fill",
