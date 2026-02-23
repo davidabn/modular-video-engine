@@ -46,9 +46,12 @@ const TikTokSubtitle: React.FC<{ words: { text: string; start: number; end: numb
         textAlign: "center"
       }}>
         {words.map((w, i) => {
+          const isVisible = time >= w.start;
+          if (!isVisible) return null; // A palavra só aparece quando o tempo chega nela
+
           return (
             <span key={i} style={{
-              color: "white", // Tudo branco, sem destaque amarelo
+              color: "white", 
               fontSize: "4.2rem",
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontWeight: 900,
