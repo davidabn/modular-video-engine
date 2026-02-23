@@ -202,24 +202,34 @@ export const MyComposition: React.FC<MyCompositionProps> = ({
               
               const isSide = layout?.style === "side" && layout?.person_box;
 
-              // --- MODO CLÁSSICO (Fallback / TikTok Minimalist) ---
+              // --- MODO CLÁSSICO (Fallback / TikTok Minimalist Rítmico) ---
               if (!isSide) {
-                  // Agrupar palavras em linhas de 5 no máximo
                   const classicChunks: {words: typeof s.words, start: number, end: number}[] = [];
                   let currentLine: typeof s.words = [];
 
                   s.words.forEach((w, idx) => {
-                      if (currentLine.length >= 5) {
+                      const lastWord = currentLine[currentLine.length - 1];
+                      
+                      // Condições para fechar o bloco (RITMO):
+                      // 1. Já temos 5 palavras
+                      // 2. A última palavra teve uma pontuação forte (. ? !)
+                      // 3. Há um silêncio significativo (> 0.4s) até a próxima palavra
+                      const isTooLong = currentLine.length >= 5;
+                      const hasPunctuation = lastWord && /[.?!]/.test(lastWord.text);
+                      const isPause = lastWord && (w.start - lastWord.end > 0.4);
+
+                      if (lastWord && (isTooLong || hasPunctuation || isPause)) {
                           classicChunks.push({
                               words: currentLine,
                               start: currentLine[0].start,
-                              end: w.start
+                              end: isPause ? lastWord.end + 0.1 : w.start // Se for pausa, limpa a tela logo após a última palavra
                           });
                           currentLine = [w];
                       } else {
                           currentLine.push(w);
                       }
                   });
+                  
                   if (currentLine.length > 0) {
                       classicChunks.push({
                           words: currentLine,
